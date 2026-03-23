@@ -7,27 +7,38 @@ Hosted on GitHub and fetched directly via raw URLs — zero cost, zero backend.
 
 ## 📁 Folder Structure
 
-```
+
 portfolio-assets/
-└── frame's/
-    ├── ezgif-frame-001.jpg
-    ├── ezgif-frame-002.jpg
-    ├── ezgif-frame-003.jpg
-    │   ...
-    └── ezgif-frame-197.jpg
-```
+└── frames/
+├── ezgif-frame-001.jpg
+├── ezgif-frame-002.jpg
+├── ezgif-frame-003.jpg
+│ ...
+├── ezgif-frame-197.jpg
+└── ezgif-frame-001.webp
+└── ezgif-frame-002.webp
+└── ...
+└── ezgif-frame-197.webp
+
 
 > **Total images:** 197  
-> **Format:** JPG  
-> **Folder:** `frame's`
+> **Original Format:** JPG  
+> **Optimized Format:** WebP  
+> **Folders:** `frames/` & `frames-webp/`
 
 ---
 
-## 🔗 Base Raw URL
+## 🔗 Base Raw URLs
 
-```
-https://raw.githubusercontent.com/Zubair-hussain/portfolio-assets/main/frame's/
-```
+**JPG:**  
+
+https://raw.githubusercontent.com/Zubair-hussain/portfolio-assets/main/frames/
+
+
+**WebP:**  
+
+https://raw.githubusercontent.com/Zubair-hussain/portfolio-assets/main/frames-webp/
+
 
 ---
 
@@ -36,105 +47,43 @@ https://raw.githubusercontent.com/Zubair-hussain/portfolio-assets/main/frame's/
 ### Generate All Image URLs
 
 ```js
-const GITHUB_BASE =
-  "https://raw.githubusercontent.com/Zubair-hussain/portfolio-assets/main/frame's/"
+const JPG_BASE = "https://raw.githubusercontent.com/Zubair-hussain/portfolio-assets/main/frames/"
+const WEBP_BASE = "https://raw.githubusercontent.com/Zubair-hussain/portfolio-assets/main/frames-webp/"
 
-// Generates: ezgif-frame-001.jpg → ezgif-frame-197.jpg
-const images = Array.from({ length: 197 }, (_, i) => {
-  const num = String(i + 1).padStart(3, '0') // 001, 002, ... 197
-  return `${GITHUB_BASE}ezgif-frame-${num}.jpg`
+// Generates: ezgif-frame-001 → ezgif-frame-197
+const jpgImages = Array.from({ length: 197 }, (_, i) => {
+  const num = String(i + 1).padStart(3, '0')
+  return `${JPG_BASE}ezgif-frame-${num}.jpg`
 })
-```
 
-### Lazy Load — First 10, Then Load More
-
-```js
-const [loadedImages, setLoadedImages] = useState(images.slice(0, 10))
-
-const loadMore = () => {
-  setLoadedImages(prev => [
-    ...prev,
-    ...images.slice(prev.length, prev.length + 10)
-  ])
-}
-```
-
-### Use in Three.js as Texture
-
-```js
-import * as THREE from 'three'
-
-const loader = new THREE.TextureLoader()
-
-const loadTexture = (index) => {
-  const num = String(index + 1).padStart(3, '0')
-  const url = `${GITHUB_BASE}ezgif-frame-${num}.jpg`
-  return loader.load(url)
-}
-```
-
----
-
-## 🔄 Frame Animation (Scroll / Interaction Based)
-
-```js
-// Change frame based on scroll position
-const totalFrames = 197
-
-window.addEventListener('scroll', () => {
-  const scrollFraction = window.scrollY / (document.body.scrollHeight - window.innerHeight)
-  const frameIndex = Math.min(
-    Math.floor(scrollFraction * totalFrames),
-    totalFrames - 1
-  )
-  // load image at frameIndex
+const webpImages = Array.from({ length: 197 }, (_, i) => {
+  const num = String(i + 1).padStart(3, '0')
+  return `${WEBP_BASE}ezgif-frame-${num}.webp`
 })
-```
+
+Use webpImages in production for faster loading.
+
+⚡ Performance Tips
+Tip	Benefit
+Load first 10 frames	Fast initial render
+Use WebP in production	Smaller file size, faster load
+Lazy load remaining frames	Smooth scrolling / animation
+Cache textures in a Map	Avoid re-fetching same frames
+👤 Author
+
+Zubair Hussain
+Full Stack Developer & Co-Founder @ Xovato
+
+📍 Hyderabad, Pakistan
+🔗 GitHub: @Zubair-hussain
+
+
+> Save the file after replacing the conflict markers.
 
 ---
 
-## ⚡ Performance Tips
+## 2️⃣ Stage and continue rebase
 
-| Tip | Benefit |
-|-----|---------|
-| Load first 10 frames on page load | Fast initial render |
-| Use `loading="lazy"` on `<img>` tags | Browser handles lazy loading |
-| Preload next 5 frames ahead | Smooth animation, no flicker |
-| Use `IntersectionObserver` | Load only when needed |
-| Cache loaded textures in a Map | Avoid re-fetching same frame |
-
-### Texture Caching Example
-
-```js
-const textureCache = new Map()
-
-const getTexture = (index) => {
-  if (textureCache.has(index)) return textureCache.get(index)
-  const texture = loadTexture(index)
-  textureCache.set(index, texture)
-  return texture
-}
-```
-
----
-
-## 🌐 Why GitHub Raw Hosting?
-
-- ✅ 100% free — no billing, no limits for portfolio traffic
-- ✅ No backend needed
-- ✅ Works perfectly with Next.js, React, Three.js
-- ✅ Simple URLs, easy to maintain
-- ✅ Version controlled — update images via Git
-
----
-
-## 👤 Author
-
-**Zubair Hussain**  
-Full Stack Developer & Co-Founder @ [Xovato](https://xovato.com)  
-📍 Hyderabad, Pakistan  
-🔗 GitHub: [@Zubair-hussain](https://github.com/Zubair-hussain)
-
----
-
-> This repo is part of my personal 3D portfolio built with **Next.js 15**, **Three.js**, **Framer Motion**, and **TypeScript**.
+```bash
+git add README.md
+git rebase --continue
